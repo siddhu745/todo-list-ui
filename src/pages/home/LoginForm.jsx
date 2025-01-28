@@ -1,16 +1,29 @@
 import React, { useState } from 'react'
 import SubmitButton from '../../components/button/SubmitButton';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { axiosClient, httpMethods, ping, useNavigation } from '../../apiClient/apiClient';
+import { LOGIN } from '../../apiClient/url';
 
 function LoginForm() {
     const [inputs, setInputs] = useState({})
     const [errors, setErrors] = useState({});
-    const [isLoginForm, setIsLoginForm] = useState(true)
+    const [isLoginForm, setIsLoginForm] = useState(true);
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    useNavigation();
+    
 
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }))
     }
+
+    const addName = () => {
+        setInputs(values => ({...values, ["name"] : inputs?.email?.split('.')[0].split('@')[0]}))
+    }
+
     const validate = () => {
         let isValid = true;
         let newErrors = {};
@@ -44,13 +57,24 @@ function LoginForm() {
         setErrors(newErrors);
         return isValid;
     };
-    const handleSubmit = (event) => {
-        event.preventDefault()
+
+    
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        addName();
         if (validate()) {
             setErrors({})
-            alert(JSON.stringify(inputs))
+            try {
+                const response = await axiosClient.post(LOGIN,inputs)
+                login(response?.data?.data);
+                navigate('/dashboard', { replace: true } );
+            } catch (error) {
+                errors.apiError = error?.response?.data?.message
+                console.log(errors.apiError)
+            }
         }      
     }
+
     const handleFormChange = () => {
         setIsLoginForm((prev) => !prev)
     }
