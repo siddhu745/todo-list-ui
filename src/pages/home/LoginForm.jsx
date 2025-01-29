@@ -1,28 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SubmitButton from '../../components/button/SubmitButton';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { axiosClient, httpMethods, ping, useNavigation } from '../../apiClient/apiClient';
-import { LOGIN } from '../../apiClient/url';
+import { axiosClient } from '../../apiClient/apiClient';
+import { LOGIN, REGISTER } from '../../apiClient/url';
+import LoadingButton from '../../components/button/LoadingButton';
 
 function LoginForm() {
     const [inputs, setInputs] = useState({})
     const [errors, setErrors] = useState({});
     const [isLoginForm, setIsLoginForm] = useState(true);
+    const [apiLoading,setApiLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
-    useNavigation();
-    
 
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }))
+        addName();
     }
 
     const addName = () => {
-        setInputs(values => ({...values, ["name"] : inputs?.email?.split('.')[0].split('@')[0]}))
+        setInputs(values => ({...values, ["username"] : inputs?.email?.split('.')[0]?.split('@')[0]}))
     }
+
+    useEffect(() => {
+        if(Object.keys(errors).length > 0) {
+            const timer = setTimeout(() => {
+                setErrors({})
+            },3000)
+            return () => clearTimeout(timer)
+        }
+        
+    },[errors])
 
     const validate = () => {
         let isValid = true;
@@ -61,16 +72,20 @@ function LoginForm() {
     
     const handleSubmit = async (event) => {
         event.preventDefault();
-        addName();
         if (validate()) {
             setErrors({})
             try {
-                const response = await axiosClient.post(LOGIN,inputs)
+                setApiLoading(true)
+                const response = await axiosClient.post(isLoginForm ? LOGIN : REGISTER,inputs)
                 login(response?.data?.data);
                 navigate('/dashboard', { replace: true } );
             } catch (error) {
-                errors.apiError = error?.response?.data?.message
-                console.log(errors.apiError)
+                let newErrors = {}
+                newErrors.apiError = error?.response?.data?.message
+                setErrors(newErrors);
+            }
+            finally {
+                setApiLoading(false)
             }
         }      
     }
@@ -86,10 +101,11 @@ function LoginForm() {
                 Your First 
                 T<span className='text-teal-500'>O</span>
                 D<span className='text-teal-500'>O</span>
-            </h2>:
+            </h2> :
             <h2 className='font-medium mb-10'>
                 Create acc<span className='text-teal-500'>o</span>unt
             </h2>}
+            
             <form onSubmit={handleSubmit}>
                 <div className='mb-2'>
                     <label htmlFor='email'>Email</label><br />
@@ -116,7 +132,9 @@ function LoginForm() {
                     />
                     {errors.password && <p className='text-red-500 p-2 m-1 bg-red-100 rounded-md w-64'>{errors.password}</p>}
                 </div>
-                <div className='text-right '><SubmitButton text={isLoginForm ? 'Login' : 'Register'} /></div>
+                <div className='flex justify-end'>
+                    {apiLoading ? <LoadingButton /> : <SubmitButton text={isLoginForm ? 'Login' : 'Register'} />}
+                </div>
             </form>
             <p className='mt-10'>
                 {isLoginForm ? 'Don\'t have an accont ?' : 'Already have an account ?'}
@@ -127,6 +145,7 @@ function LoginForm() {
                     {isLoginForm ? ' Create' : ' Login'}
                 </span>
             </p>
+            {errors.apiError && <p className='text-red-500 p-2 m-5 ml-0 bg-red-100 rounded-md w-64'>{errors.apiError}</p>}
         </div>
     )
 }

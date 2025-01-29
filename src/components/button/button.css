@@ -1,0 +1,15 @@
+.loadBg {
+    background: conic-gradient(
+        rgba(255, 255, 255, 0.2) 0deg 20deg, white 120deg 360deg
+    );
+    animation: spin .4s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

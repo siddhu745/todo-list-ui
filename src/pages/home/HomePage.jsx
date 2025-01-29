@@ -10,7 +10,7 @@ function HomePage() {
   const boxRef = useRef(null);
   const { authData,loading } = useAuth();
   const navigate = useNavigate();
-
+  
   const tryThis = () => {
     if(!loading && authData.token) navigate('/dashboard');
     else boxRef.current.classList.toggle('show');

@@ -6,7 +6,7 @@ function ProtectedRoute({ children }) {
     const { authData, loading } = useAuth();
     if (!loading && !authData?.token) {
         return <Navigate to={'/'} />
-    } 
+    }
     return children
 }
 

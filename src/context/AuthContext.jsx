@@ -10,8 +10,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const data = localStorage.getItem('authData');
         if (data) {
-            console.log(data)
-            console.log('reached ===> in authContext')
             try {
                 setAuthData(JSON.parse(data))
             } catch (error) {
