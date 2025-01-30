@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import SubmitButton from '../../components/button/SubmitButton';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { replace, useNavigate } from 'react-router-dom';
 import { axiosClient } from '../../apiClient/apiClient';
 import { LOGIN, REGISTER } from '../../apiClient/url';
 import LoadingButton from '../../components/button/LoadingButton';
+import { removeAfterSomeTime } from '../../utils/utils';
 
 function LoginForm() {
     const [inputs, setInputs] = useState({})
     const [errors, setErrors] = useState({});
     const [isLoginForm, setIsLoginForm] = useState(true);
-    const [apiLoading,setApiLoading] = useState(false);
+    const [apiLoading, setApiLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
 
@@ -22,18 +23,12 @@ function LoginForm() {
     }
 
     const addName = () => {
-        setInputs(values => ({...values, ["username"] : inputs?.email?.split('.')[0]?.split('@')[0]}))
+        setInputs(values => ({ ...values, ["username"]: inputs?.email?.split('.')[0]?.split('@')[0] }))
     }
 
     useEffect(() => {
-        if(Object.keys(errors).length > 0) {
-            const timer = setTimeout(() => {
-                setErrors({})
-            },3000)
-            return () => clearTimeout(timer)
-        }
-        
-    },[errors])
+        removeAfterSomeTime(errors, setErrors)
+    }, [errors])
 
     const validate = () => {
         let isValid = true;
@@ -69,16 +64,16 @@ function LoginForm() {
         return isValid;
     };
 
-    
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (validate()) {
             setErrors({})
             try {
                 setApiLoading(true)
-                const response = await axiosClient.post(isLoginForm ? LOGIN : REGISTER,inputs)
+                const response = await axiosClient.post(isLoginForm ? LOGIN : REGISTER, inputs)
                 login(response?.data?.data);
-                navigate('/dashboard', { replace: true } );
+                navigate('/dashboard', { replace: true });
             } catch (error) {
                 let newErrors = {}
                 newErrors.apiError = error?.response?.data?.message
@@ -87,7 +82,7 @@ function LoginForm() {
             finally {
                 setApiLoading(false)
             }
-        }      
+        }
     }
 
     const handleFormChange = () => {
@@ -95,17 +90,17 @@ function LoginForm() {
     }
     return (
         <div>
-            
-            {isLoginForm ? 
-            <h2 className='font-medium mb-10'>
-                Your First 
-                T<span className='text-teal-500'>O</span>
-                D<span className='text-teal-500'>O</span>
-            </h2> :
-            <h2 className='font-medium mb-10'>
-                Create acc<span className='text-teal-500'>o</span>unt
-            </h2>}
-            
+
+            {isLoginForm ?
+                <h2 className='font-medium mb-10'>
+                    Your First
+                    T<span className='text-teal-500'>O</span>
+                    D<span className='text-teal-500'>O</span>
+                </h2> :
+                <h2 className='font-medium mb-10'>
+                    Create acc<span className='text-teal-500'>o</span>unt
+                </h2>}
+
             <form onSubmit={handleSubmit}>
                 <div className='mb-2'>
                     <label htmlFor='email'>Email</label><br />

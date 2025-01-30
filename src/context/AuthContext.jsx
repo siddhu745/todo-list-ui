@@ -5,7 +5,9 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [authData, setAuthData] = useState({});
+    const [unAuthError, setUnauthError] = useState({})
     const [loading, setLoading] = useState(true);
+    const [isLogOut, setIsLogOut] = useState(false);
 
     useEffect(() => {
         const data = localStorage.getItem('authData');
@@ -20,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, [])
 
+
     const login = (authData) => {
         if (authData) {
             setAuthData(authData);
@@ -29,11 +32,23 @@ export const AuthProvider = ({ children }) => {
 
     const logOut = () => {
         setAuthData({});
+        setIsLogOut(true);
         localStorage.removeItem('authData');
     }
 
     return (
-        <AuthContext.Provider value={{ authData, login, logOut, loading }}>
+        <AuthContext.Provider value={
+            { 
+                authData,
+                login,
+                logOut, 
+                loading, 
+                unAuthError, 
+                setUnauthError,
+                isLogOut,
+                setIsLogOut
+            }
+        }>
             {children}
         </AuthContext.Provider>
     )

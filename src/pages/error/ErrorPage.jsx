@@ -1,27 +1,35 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import { useNavigate, useRouteError } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext';
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-function ErrorPage() {
+function ErrorPage({statusCode,message,description}) {
   const navigate = useNavigate();
-  const { logOut } = useAuth();
 
   const handleClick = () => {
-    logOut()
-    navigate('/')
+    navigate('/', { replace: true })
   }
 
   useEffect(() => {
     const timeOut = setTimeout(() => {
       handleClick()
-    },5000)
+    },10000)
 
     return () => clearTimeout(timeOut)
 
   },[])
 
   return (
-    <div>ErrorPage <button onClick={handleClick}>Go Home</button></div>
+    <div className='flex justify-center items-center h-screen'>
+      <div>
+        <div className='text-9xl text-center font-black text-gray-400'>{statusCode}</div>
+        <p className='text-center font-medium text-2xl m-5'>{message}</p>
+        <div className='flex justify-center'>
+          <p className='text-center w-72 text-gray-500'>{description}</p>
+        </div>
+        <div className='flex justify-center m-5'>
+          <button className='blackButton' onClick={handleClick}>Go Home</button>
+        </div>
+      </div>
+    </div>
   )
 }
 

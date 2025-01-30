@@ -9,6 +9,7 @@
     background-position: center;
     background-size: contain;
     height: 100vh;
+    min-height: 850px;
     position: relative;
 }
 
