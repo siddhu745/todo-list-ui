@@ -18,7 +18,7 @@ function App() {
             element={<ErrorPage
               statusCode={404}
               message={'Sorry, we couldn\'t find this page'}
-              description={'But don\'t worry, your can find plenty of other things on our homepage'}
+              description={'But don\'t worry, you can find plenty of other things on our homepage'}
             />}
           />
 

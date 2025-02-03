@@ -12,7 +12,7 @@ function ProtectedRoute({ children }) {
         return <ErrorPage 
                     statusCode={401} 
                     message={'Unauthorized access to this page'} 
-                    description={'But don\'t worry, your can go home and login/register to access this page'}
+                    description={'But don\'t worry, you can go home and login/register to access this page'}
                 />
     }
     return children
