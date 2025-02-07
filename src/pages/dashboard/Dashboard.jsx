@@ -1,27 +1,14 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import { axiosClient } from '../../apiClient/apiClient';
-import { SECURED } from '../../apiClient/url';
-import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/siddhu_outline_logo.svg'
 import { MdAutoGraph, MdOutlineInventory } from 'react-icons/md';
 import Todos from './Todos';
 
 function Dashboard() {
-    const { authData, logOut, setUnauthError } = useAuth();
-    const navigate = useNavigate()
-    const [active, setActive] = useState(0)
 
-    const callApi = async () => {
-        try {
-            const response = await axiosClient.get(SECURED, { withCredentials: true })
-        } catch (error) {
-            if (error?.response?.status === 401 || error?.response?.status === 403) {
-                setUnauthError(error)
-                navigate('/', { replace: true })
-            }
-        }
-    }
+    const { logOut } = useAuth();
+    
+    const [active, setActive] = useState(0)
 
     const handleLogOut = () => {
         navigate('/', { replace: true })
@@ -60,6 +47,7 @@ function Dashboard() {
                             })
 
                         }
+                        <li></li>
                     </ul>
                 </div>
             </div>

@@ -76,7 +76,7 @@ function LoginForm() {
                 navigate('/dashboard', { replace: true });
             } catch (error) {
                 let newErrors = {}
-                newErrors.apiError = error?.response?.data?.message
+                newErrors.apiError = error?.response?.data?.message || error?.code === 'ERR_NETWORK' && "Network error please try after some time"
                 setErrors(newErrors);
             }
             finally {

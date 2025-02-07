@@ -50,7 +50,7 @@ function Todos() {
                                     return (
                                         <div
                                             key={idx}
-                                            className={`text-center cursor-pointer ${idx == 3 && 'text-blue-600 font-bold'} ${ activeDate === idx && 'text-gray-700 font-bold'}`}
+                                            className={`text-center cursor-pointer font-bold text-gray-400 ${idx == 3 && 'text-blue-400'} ${ activeDate === idx && 'text-gray-700'}`}
                                             onClick={() => setActiveDate(idx)}
                                         >
                                             <div>{d.toLocaleDateString("en-US", { weekday: 'short' })}</div>

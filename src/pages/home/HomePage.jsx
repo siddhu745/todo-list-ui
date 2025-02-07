@@ -14,9 +14,14 @@ function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (unAuthError.response) {
+    if (unAuthError?.response) {
       logOut();
       setError(unAuthError.response.data)
+      setUnauthError({})
+    }
+    if(unAuthError?.code === 'ERR_NETWORK') {
+      logOut();
+      setError("Network error please try again after some time...")
       setUnauthError({})
     }
     setIsLogOut(false);
