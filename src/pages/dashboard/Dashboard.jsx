@@ -29,9 +29,9 @@ function Dashboard() {
     return (
         <div className='flex'>
             <div className='h-screen w-60 border-r sticky top-0'>
-                <div className='flex items-center m-7 mb-20 gap-2'>
-                    <img alt='logo' src={logo} />
-                    <h2 className='text-gray-700 font-medium'>Todo</h2>
+                <div className='flex items-center m-14 mb-20 gap-2'>
+                    <img height={30} width={30} alt='logo' src={logo} />
+                    <h2 className='text-gray-700 font-medium'>todo</h2>
                 </div>
                 <div>
                     <ul>
