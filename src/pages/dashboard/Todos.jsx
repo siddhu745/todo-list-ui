@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { CiEdit } from 'react-icons/ci'
-import { MdAdd, MdDone, MdOutlineBookmarkRemove, MdOutlineDeleteOutline } from 'react-icons/md'
+import { MdAdd, MdBookmarkRemove, MdDelete, MdDone, MdEdit } from 'react-icons/md'
 
 function Todos() {
     const [date, setDate] = useState(new Date())
@@ -220,7 +219,7 @@ function Todos() {
     const getTodoColor = (state) => {
         switch (state) {
             case "TODO":
-                return 'orange-300'
+                return 'blue-500'
             case "SKIPPED":
                 return 'red-500'
             case "COMPLETED":
@@ -233,7 +232,7 @@ function Todos() {
     const getBgColor = (state) => {
         switch (state) {
             case 1:
-                return 'bg-orange-50'
+                return 'bg-blue-50'
             case 3:
                 return 'bg-red-50'
             case 2:
@@ -262,11 +261,11 @@ function Todos() {
                 onMouseOver={() => setHoverd(true)}
                 onMouseOut={() => setHoverd(false)}
             >
-                {hoverd && <div className='absolute right-0 top-0 text-slate-500 border-slate-100 text-2xl flex gap-2 p-1'>
-                    <CiEdit className='text-slate-600 cursor-pointer' title='edit' />
-                    <MdOutlineDeleteOutline className='text-red-600 cursor-pointer' title='delete' />
-                    <MdOutlineBookmarkRemove className='text-blue-500 cursor-pointer' title='skip' />
-                    <MdDone className='text-green-600 cursor-pointer' title='complete' />
+                {hoverd && <div title='Quick actions' className='absolute right-0 top-0 text-slate-500 border-slate-100 text-2xl flex gap-2 p-1'>
+                    <MdEdit className='text-slate-400 hover:text-blue-500 cursor-pointer' title='edit' />
+                    <MdDelete  className='text-slate-400 hover:text-red-500 cursor-pointer' title='delete' />
+                    <MdBookmarkRemove  className='text-slate-400 hover:text-purple-500 cursor-pointer' title='skip' />
+                    <MdDone className='text-slate-400 hover:text-green-500 cursor-pointer' title='complete' />
                 </div>}
                 <p className={`font-medium text-lg text-${getTodoColor(item.state)}`}>{item.taskName}</p>
                 <p className='text-sm text-slate-500'>{item.taskDesc}</p>
@@ -300,7 +299,7 @@ function Todos() {
 
             {/* todo menu */}
             <div className='flex gap-5 items-center'>
-                <div className={`bg-slate-50 w-fit m-3 ml-5 rounded-xl p-1 ${getBgColor(active)}`}>
+                <div className={`bg-slate-50 w-fit m-3 ml-4 rounded-xl p-1 ${getBgColor(active)}`}>
                     {
                         menuItems.map((d, idx) => {
                             return (
