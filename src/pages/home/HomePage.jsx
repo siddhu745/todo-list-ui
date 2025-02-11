@@ -21,11 +21,11 @@ function HomePage() {
     }
     if(unAuthError?.code === 'ERR_NETWORK') {
       logOut();
-      setError("Network error please try again after some time...")
+      setError({message:"Network error please try again after some time..."})
       setUnauthError({})
     }
     setIsLogOut(false);
-  })
+  },[])
 
   useEffect(() => {
     removeAfterSomeTime(error, setError)

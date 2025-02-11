@@ -2,7 +2,7 @@
     background: conic-gradient(
         rgba(255, 255, 255, 0.2) 0deg 20deg, white 120deg 360deg
     );
-    animation: spin 2s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
