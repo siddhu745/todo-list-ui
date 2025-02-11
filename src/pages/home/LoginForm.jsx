@@ -19,7 +19,6 @@ function LoginForm() {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }))
-        addName();
     }
 
     const addName = () => {
@@ -70,6 +69,7 @@ function LoginForm() {
         if (validate()) {
             setErrors({})
             try {
+                addName()
                 setApiLoading(true)
                 const response = await axiosClient.post(isLoginForm ? LOGIN : REGISTER, inputs)
                 login(response?.data?.data);
