@@ -31,7 +31,7 @@ function Dashboard() {
             <div className='h-screen w-60 border-r sticky top-0'>
                 <div className='flex items-center m-14 mb-20 gap-2'>
                     <img height={30} width={30} alt='logo' src={logo} />
-                    <h2 className='text-gray-700 font-medium'>todo</h2>
+                    <h2 className='text-gray-700 dark:text-gray-100 font-medium'>todo</h2>
                 </div>
                 <div>
                     <ul>
@@ -39,7 +39,7 @@ function Dashboard() {
                             menuItems.map((d, idx) => {
                                 return (<li
                                     key={idx}
-                                    className={`flex items-center gap-3 font-medium text-lg text-gray-400 cursor-pointer m-3 ml-5 p-2 rounded-lg ${active === idx && 'bg-slate-50 text-gray-700'}`}
+                                    className={`flex items-center gap-3 font-medium text-lg text-gray-400 cursor-pointer m-3 ml-5 p-2 rounded ${active === idx && 'bg-slate-50 text-gray-700 dark:bg-slate-900 dark:text-gray-100'}`}
                                     onClick={() => setActive(idx)}
                                 >
                                     {d.icon} {d.name}

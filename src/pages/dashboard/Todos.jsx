@@ -257,7 +257,7 @@ function Todos() {
 
         return (
             <div
-                className={`bg-white shadow-md  border-t-4 rounded-t border-t-${getTodoColor(item.state)} rounded-sm p-6 pl-5 pb-7 w-80 m-3 h-fit relative`}
+                className={`bg-white dark:bg-slate-900 shadow-md  border-t-4 rounded-t border-t-${getTodoColor(item.state)} rounded-sm p-6 pl-5 pb-7 w-80 m-3 h-fit relative`}
                 onMouseOver={() => setHoverd(true)}
                 onMouseOut={() => setHoverd(false)}
             >
@@ -299,13 +299,13 @@ function Todos() {
 
             {/* todo menu */}
             <div className='flex gap-5 items-center'>
-                <div className={`bg-slate-50 w-fit m-3 ml-4 rounded-xl p-1 ${getBgColor(active)}`}>
+                <div className={`bg-slate-50 dark:bg-slate-900 w-fit m-3 ml-4 rounded-xl p-1 ${getBgColor(active)}`}>
                     {
                         menuItems.map((d, idx) => {
                             return (
                                 <span
                                     key={idx}
-                                    className={`cursor-pointer p-1 text-lg inline-block text-center w-28 ${active === idx && `text-${getTodoColor(d.toUpperCase())} font-medium`}`}
+                                    className={`cursor-pointer p-1  text-lg inline-block text-center w-28 ${active === idx && `text-${getTodoColor(d.toUpperCase())} font-medium`}`}
                                     onClick={() => setActive(idx)}
                                 >
                                     {d}
