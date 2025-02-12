@@ -37,7 +37,7 @@ function ProtectedRoute({ children }) {
             description={'But don\'t worry, you can go home and login/register to access this page'}
         />
     }
-    return allow ? children : <h1 className='font-bold text-slate-500 text-2xl text-center m-10'>Loading & validating credentials...</h1>
+    return allow ? children : <h1 className='font-extralight text-slate-500 text-2xl text-center m-10'>Loading & validating credentials...</h1>
 }
 
 export default ProtectedRoute

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { MdAdd, MdBookmarkRemove, MdDelete, MdDone, MdEdit } from 'react-icons/md'
+import AddTodoForm from './components/AddTodoForm'
 
 function Todos() {
-    const [date, setDate] = useState(new Date())
+    const date = new Date()
     const [active, setActive] = useState(0)
-    const [activeDate, setActiveDate] = useState(3)
+    const [addTodo, setAddTodo] = useState(false)
     const [items, setItems] = useState([
         {
             id: 1,
@@ -216,48 +217,33 @@ function Todos() {
         "Skipped"
     ]
 
-    const getTodoColor = (state) => {
-        switch (state) {
-            case "TODO":
-                return 'blue-500'
-            case "SKIPPED":
-                return 'red-500'
-            case "COMPLETED":
-                return 'green-500'
-            default:
-                break;
-        }
+
+    const getTodoBorderColor = {
+        TODO : "border-t-blue-500",
+        SKIPPED : "border-t-red-500",
+        COMPLETED : "border-t-green-500"
     }
 
-    const getBgColor = (state) => {
-        switch (state) {
-            case 1:
-                return 'bg-blue-50'
-            case 3:
-                return 'bg-red-50'
-            case 2:
-                return 'bg-green-50'
-            default:
-                break;
-        }
+    const getTodoHeadingColor = {
+        TODO : "text-blue-500",
+        SKIPPED : "text-red-500",
+        COMPLETED : "text-green-500"
     }
 
-    const getRecentDays = () => {
-        const days = [];
-        for (let i = 0; i < 7; i++) {
-            const nextDay = new Date(date);
-            nextDay.setDate(date.getDate() + i - 3);
-            days.push(nextDay);
-        }
-        return days;
-    };
+
+    const getMenuBgColor = {
+        0 : "bg-slate-50",
+        1 : "bg-blue-50",
+        2 : "bg-green-50",
+        3 : "bg-red-50",
+    }
 
     const TodoItem = ({ item }) => {
         const [hoverd, setHoverd] = useState(false)
 
         return (
             <div
-                className={`bg-white dark:bg-slate-900 shadow-md  border-t-4 rounded-t border-t-${getTodoColor(item.state)} rounded-sm p-6 pl-5 pb-7 w-80 m-3 h-fit relative`}
+                className={`border-t-4 ${getTodoBorderColor[item.state]} bg-white dark:bg-slate-900 shadow-md rounded-sm rounded-t    p-6 pl-5 pb-7 w-80 m-3 h-fit relative`}
                 onMouseOver={() => setHoverd(true)}
                 onMouseOut={() => setHoverd(false)}
             >
@@ -267,7 +253,7 @@ function Todos() {
                     <MdBookmarkRemove  className='text-slate-400 hover:text-purple-500 cursor-pointer' title='skip' />
                     <MdDone className='text-slate-400 hover:text-green-500 cursor-pointer' title='complete' />
                 </div>}
-                <p className={`font-medium text-lg text-${getTodoColor(item.state)}`}>{item.taskName}</p>
+                <p className={`font-medium text-lg ${getTodoHeadingColor[item.state]}`}>{item.taskName}</p>
                 <p className='text-sm text-slate-500'>{item.taskDesc}</p>
                 {hoverd && <p title='created at' className='absolute text-xs text-slate-300 right-2 bottom-2'>{item.cAt}</p>}
             </div>
@@ -275,7 +261,7 @@ function Todos() {
     }
 
     return (
-        <div className='ml-10'>
+        <div className='pl-10'>
             {/* date section */}
             <div className='flex'>
                 <div className='flex items-end gap-5 p-10'>
@@ -299,13 +285,13 @@ function Todos() {
 
             {/* todo menu */}
             <div className='flex gap-5 items-center'>
-                <div className={`bg-slate-50 dark:bg-slate-900 w-fit m-3 ml-4 rounded-xl p-1 ${getBgColor(active)}`}>
+                <div className={`dark:bg-slate-900 w-fit m-3 ml-4 rounded-xl p-1 ${getMenuBgColor[active]}`}>
                     {
                         menuItems.map((d, idx) => {
                             return (
                                 <span
                                     key={idx}
-                                    className={`cursor-pointer p-1  text-lg inline-block text-center w-28 ${active === idx && `text-${getTodoColor(d.toUpperCase())} font-medium`}`}
+                                    className={`cursor-pointer p-1  text-lg inline-block text-center w-28 ${active === idx && `${getTodoHeadingColor[d.toUpperCase()]} font-medium`}`}
                                     onClick={() => setActive(idx)}
                                 >
                                     {d}
@@ -315,8 +301,17 @@ function Todos() {
                     }
 
                 </div>
-                <button title='Add todo' type='button' className='flex items-center bg-blue-500 text-white font-extrabold text-2xl p-1 rounded-full h-fit'><MdAdd /></button>
+                <button 
+                    title='Add todo' 
+                    type='button' 
+                    className='flex items-center bg-blue-500 text-white font-extrabold text-2xl p-1 rounded-full h-fit'
+                    onClick={() => setAddTodo((prev) => !prev)}
+                >
+                    <MdAdd />
+                </button>
             </div>
+
+            {/* items */}
             <div className='flex p-2 flex-wrap'>
 
                 {items.filter((item) => item.state === menuItems[active].toUpperCase() || active === 0).length === 0
@@ -336,6 +331,8 @@ function Todos() {
                 }
 
             </div>
+
+            <AddTodoForm showForm={addTodo} setShowFrom={setAddTodo} />
 
         </div>
     )
