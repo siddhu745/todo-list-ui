@@ -4,10 +4,24 @@ function AddTodoForm({ showForm, setShowFrom }) {
     const [inputs, setInputs] = useState({})
     const [show, setShow] = useState(false);
 
+    const addMetaData = () => {
+        setInputs((prev) => (
+            {
+                ...prev,
+                cAt: new Date().toISOString(),
+                user: "siddhu",
+                state: "TODO"
+            }
+        ))
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        alert(JSON.stringify(inputs))
+        addMetaData();
+        console.log(inputs)
     }
+
+
 
     const handleChange = (event) => {
         const name = event.target.name
@@ -34,7 +48,7 @@ function AddTodoForm({ showForm, setShowFrom }) {
             onClick={handleClose}
         >
             <div
-                className={`bg-white p-5 rounded-md drop-shadow-xl border transition-all duration-300 ease-in-out ${show ? 'mt-0' : 'mt-5'}`}
+                className={`bg-white p-5 rounded-md drop-shadow-2xl border transition-all duration-300 ease-in-out ${show ? 'mt-0' : 'mt-5'}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <h1 className='text-blue-500 text-2xl m-1 mb-5'>Add Todo</h1>
@@ -42,36 +56,38 @@ function AddTodoForm({ showForm, setShowFrom }) {
                     <div className='mb-3'>
                         <label htmlFor='name' className='m-1 text-slate-500'>Name</label><br />
                         <input
-                            name='todoName'
-                            value={inputs.todoName || ""}
+                            name='name'
+                            value={inputs.name || ""}
                             type='text'
                             onChange={handleChange}
-                            className='border-2 p-1 pl-2 rounded-xl w-80'
+                            className='border-2 p-1 pl-2 rounded-xl w-80 focus:border-blue-500 focus:outline-none'
+                            required
                         />
                     </div>
                     <div className='mb-3'>
                         <label htmlFor='description' className='m-1 text-slate-500'>Description</label><br />
                         <textarea
-                            name='todoDesc'
-                            value={inputs.todoDesc || ""}
+                            name='description'
+                            value={inputs.description || ""}
                             type='area'
                             onChange={handleChange}
-                            className='border-2 p-1 pl-2 rounded-xl w-80'
+                            className='border-2 p-1 pl-2 rounded-xl w-80 focus:border-blue-500 focus:outline-none'
                             rows={6}
+                            required
                         >
                         </textarea>
 
                     </div>
-                    <div>
+                    <div className='float-right'>
                         <button
                             type='button'
                             onClick={handleClose}
-                            className='p-2 border rounded'
+                            className='p-2 pb-1 pt-1 border border-slate-500 rounded mr-2 focus:bg-slate-500 focus:text-white'
                         >
                             cancel
                         </button>
                         <button
-                        className='p-2 border rounded'
+                        className='p-2 pb-1 pt-1 border border-blue-500 bg-blue-500 text-white rounded'
                         >add</button>
                     </div>
                 </form>

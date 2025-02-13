@@ -317,7 +317,7 @@ function Todos() {
                 {items.filter((item) => item.state === menuItems[active].toUpperCase() || active === 0).length === 0
                     ?
                     <div className='m-3 mt-0 p-2 text-2xl font-extralight'>
-                        No todos left here
+                        No todos left here {active === 0 && ', have a goal today and create one.'}
                     </div> :
                     <div className='m-3 mt-0 text-2xl font-extralight w-full'>
                         {items.filter((item) => item.state === menuItems[active].toUpperCase() || active === 0).length} Todos
