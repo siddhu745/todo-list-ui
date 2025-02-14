@@ -44,7 +44,7 @@ function AddTodoForm({ showForm, setShowFrom }) {
 
     return (
         showForm && <div
-            className={`fixed h-screen w-full flex justify-center items-center bg-opacity-10 top-0 left-0`}
+            className={`fixed h-screen w-full flex justify-center items-center top-0 left-0 backdrop-blur-md`}
             onClick={handleClose}
         >
             <div
