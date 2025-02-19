@@ -44,11 +44,11 @@ function AddTodoForm({ showForm, setShowFrom }) {
 
     return (
         showForm && <div
-            className={`fixed h-screen w-full flex justify-center items-center top-0 left-0 backdrop-blur-md`}
+            className={`fixed h-screen w-full flex justify-center items-center top-0 left-0`}
             onClick={handleClose}
         >
             <div
-                className={`bg-white p-5 rounded-md drop-shadow-2xl border transition-all duration-300 ease-in-out ${show ? 'mt-0' : 'mt-5'}`}
+                className={`bg-white p-5 rounded-md drop-shadow-2xl transition-all duration-300 ease-in-out ${show ? 'mt-0' : 'mt-5'}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <h1 className='text-blue-500 text-2xl m-1 mb-5'>Add Todo</h1>
@@ -82,7 +82,7 @@ function AddTodoForm({ showForm, setShowFrom }) {
                         <button
                             type='button'
                             onClick={handleClose}
-                            className='p-2 pb-1 pt-1 border border-slate-500 rounded mr-2 focus:bg-slate-500 focus:text-white'
+                            className='p-2 pb-1 pt-1 border border-slate-500 rounded mr-2'
                         >
                             cancel
                         </button>
