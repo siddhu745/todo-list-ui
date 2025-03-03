@@ -21,10 +21,6 @@ function LoginForm() {
         setInputs(values => ({ ...values, [name]: value }))
     }
 
-    const addName = () => {
-        setInputs(values => ({ ...values, ["username"]: inputs?.email?.split('.')[0]?.split('@')[0] }))
-    }
-
     useEffect(() => {
         removeAfterSomeTime(errors, setErrors)
     }, [errors])
@@ -69,7 +65,6 @@ function LoginForm() {
         if (validate()) {
             setErrors({})
             try {
-                addName()
                 setApiLoading(true)
                 const response = await axiosClient.post(isLoginForm ? LOGIN : REGISTER, inputs)
                 login(response?.data?.data);

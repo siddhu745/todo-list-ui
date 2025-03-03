@@ -17,7 +17,7 @@ function ProtectedRoute({ children }) {
         } catch (error) {
             if (error?.code === 'ERR_NETWORK' || error?.response?.status === 401 || error?.response?.status === 403) {
                 setUnauthError(error)
-                console.log(error, "at protected route")
+                // console.log(error, "at protected route")
                 navigate('/', { replace: true })
             }
         }
