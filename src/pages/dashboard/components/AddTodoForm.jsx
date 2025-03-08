@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { axiosClient } from "../../../apiClient/apiClient";
 import { CREATE_TODO } from "../../../apiClient/url";
 
-function AddTodoForm({ showForm, setShowFrom }) {
+function AddTodoForm({ showForm, setShowFrom, setInserted }) {
   const [inputs, setInputs] = useState({});
   const [show, setShow] = useState(false);
   const [wait, setWait] = useState(false);
@@ -12,7 +12,10 @@ function AddTodoForm({ showForm, setShowFrom }) {
     event.preventDefault();
     try {
       setWait(true);
-      await axiosClient.post(CREATE_TODO, inputs);
+      const response = await axiosClient.post(CREATE_TODO, inputs);
+      if(response.status === 200) {
+        setInserted(true)
+      }
       handleClose()
     } catch (error) {
       setMsg("Network Error !, please try again...");
