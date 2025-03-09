@@ -60,8 +60,8 @@ function AddTodoForm({
     setTimeout(() => {
       setShowFrom(false);
       setMsg("");
+      setUpdateTodo({})
     }, 150);
-    setUpdateTodo({});
   };
 
   return (

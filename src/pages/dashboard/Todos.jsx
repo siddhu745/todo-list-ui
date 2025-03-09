@@ -8,8 +8,10 @@ import {
 } from "react-icons/md";
 import AddTodoForm from "./components/AddTodoForm";
 import { axiosClient } from "../../apiClient/apiClient";
-import { GET_TODO, UPDATE, UPDATE_STATE } from "../../apiClient/url";
+import { GET_TODO, UPDATE_STATE } from "../../apiClient/url";
 import DeleteAlert from "./components/DeleteAlert";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Todos() {
   const date = new Date();
@@ -23,13 +25,23 @@ function Todos() {
   const [items, setItems] = useState([]);
   const [todoStateUpdated, setTodoStateUpdated] = useState({});
   const [deletedTodo, setDeletedTodo] = useState({});
+  const { authData, loading, isLogOut, setUnauthError } = useAuth();
+  const navigate = useNavigate();
 
   const fetch = async () => {
     try {
       const response = await axiosClient.get(GET_TODO);
       setItems(response.data.data);
     } catch (error) {
-      console.log(error);
+      if (
+        error?.code === "ERR_NETWORK" ||
+        error?.response?.status === 401 ||
+        error?.response?.status === 403
+      ) {
+        setUnauthError(error);
+        // console.log(error, "at protected route")
+        navigate("/", { replace: true });
+      }
     }
   };
 
@@ -38,7 +50,15 @@ function Todos() {
       const response = await axiosClient.patch(UPDATE_STATE + `${id}/${state}`);
       if (response.status === 200) setTodoStateUpdated(response.data.data);
     } catch (error) {
-      console.log(error);
+      if (
+        error?.code === "ERR_NETWORK" ||
+        error?.response?.status === 401 ||
+        error?.response?.status === 403
+      ) {
+        setUnauthError(error);
+        // console.log(error, "at protected route")
+        navigate("/", { replace: true });
+      }
     }
   };
 
@@ -57,7 +77,15 @@ function Todos() {
       );
       if (response.status === 200) setDeletedTodo(response.data.data);
     } catch (error) {
-      console.log(error);
+      if (
+        error?.code === "ERR_NETWORK" ||
+        error?.response?.status === 401 ||
+        error?.response?.status === 403
+      ) {
+        setUnauthError(error);
+        // console.log(error, "at protected route")
+        navigate("/", { replace: true });
+      }
     }
   };
 
@@ -129,23 +157,28 @@ function Todos() {
               }}
             />
             <MdDelete
-              className="text-slate-400 hover:text-red-500 cursor-pointer"
+              className="text-slate-400 hover:text-gray-900 cursor-pointer"
               title="delete"
               onClick={() => {
                 setDeleteAlert(true);
                 setDeleteId(item.id);
               }}
             />
-            <MdBookmarkRemove
-              className="text-slate-400 hover:text-purple-500 cursor-pointer"
-              title="skip"
-              onClick={() => updateState(item.id, menuItems[3].toUpperCase())}
-            />
-            <MdDone
-              className="text-slate-400 hover:text-green-500 cursor-pointer"
-              title="complete"
-              onClick={() => updateState(item.id, menuItems[2].toUpperCase())}
-            />
+            {item.state !== menuItems[2].toUpperCase() &&
+              item.state !== menuItems[3].toUpperCase() && (
+              <MdBookmarkRemove
+                className="text-slate-400 hover:text-red-500 cursor-pointer"
+                title="skip"
+                onClick={() => updateState(item.id, menuItems[3].toUpperCase())}
+              />
+            )}
+            {item.state !== menuItems[2].toUpperCase() && (
+              <MdDone
+                className="text-slate-400 hover:text-green-500 cursor-pointer"
+                title="complete"
+                onClick={() => updateState(item.id, menuItems[2].toUpperCase())}
+              />
+            )}
           </div>
         )}
         <p className={`font-medium text-lg ${getTodoHeadingColor[item.state]}`}>
@@ -155,7 +188,7 @@ function Todos() {
         {hoverd && (
           <p
             title="created at"
-            className="absolute text-xs text-slate-300 right-2 bottom-2"
+            className="absolute text-xs text-slate-400 right-2 bottom-2"
           >
             {new Date(item.cAt).toLocaleString("en-US", {
               day: "2-digit",
