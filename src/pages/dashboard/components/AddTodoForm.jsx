@@ -60,7 +60,7 @@ function AddTodoForm({
     setTimeout(() => {
       setShowFrom(false);
       setMsg("");
-      setUpdateTodo({})
+      if(updateTodo.id) setUpdateTodo({}) //clear only when the form opened for update
     }, 150);
   };
 
