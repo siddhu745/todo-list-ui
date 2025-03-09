@@ -8,15 +8,14 @@ import {
 } from "react-icons/md";
 import AddTodoForm from "./components/AddTodoForm";
 import { axiosClient } from "../../apiClient/apiClient";
-import { GET_TODO, UPDATE_STATE } from "../../apiClient/url";
-import { DiAws } from "react-icons/di";
-import ConfirmDelete from "./components/DeleteAlert";
+import { GET_TODO, UPDATE, UPDATE_STATE } from "../../apiClient/url";
 import DeleteAlert from "./components/DeleteAlert";
 
 function Todos() {
   const date = new Date();
   const [active, setActive] = useState(0);
   const [addTodo, setAddTodo] = useState(false);
+  const [updateTodo, setUpdateTodo] = useState({});
   const [confirmDeleteTodo, setConfirmDeleteTodo] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
   const [deleteAlert, setDeleteAlert] = useState(false);
@@ -124,6 +123,10 @@ function Todos() {
             <MdEdit
               className="text-slate-400 hover:text-blue-500 cursor-pointer"
               title="edit"
+              onClick={() => {
+                setAddTodo(true);
+                setUpdateTodo(item);
+              }}
             />
             <MdDelete
               className="text-slate-400 hover:text-red-500 cursor-pointer"
@@ -257,6 +260,8 @@ function Todos() {
         showForm={addTodo}
         setShowFrom={setAddTodo}
         setInserted={setInserted}
+        updateTodo={updateTodo}
+        setUpdateTodo={setUpdateTodo}
       />
 
       <DeleteAlert

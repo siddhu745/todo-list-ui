@@ -2,21 +2,26 @@ import React, { useEffect, useState } from "react";
 import { axiosClient } from "../../../apiClient/apiClient";
 import { CREATE_TODO } from "../../../apiClient/url";
 
-function AddTodoForm({ showForm, setShowFrom, setInserted }) {
+function AddTodoForm({
+  showForm,
+  setShowFrom,
+  setInserted,
+  updateTodo,
+  setUpdateTodo,
+}) {
   const [inputs, setInputs] = useState({});
   const [show, setShow] = useState(false);
   const [wait, setWait] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const insertTodo = async () => {
     try {
       setWait(true);
       const response = await axiosClient.post(CREATE_TODO, inputs);
-      if(response.status === 200) {
-        setInserted(true)
+      if (response.status === 200) {
+        setInserted(true);
       }
-      handleClose()
+      handleClose();
     } catch (error) {
       setMsg("Network Error !, please try again...");
     } finally {
@@ -26,6 +31,11 @@ function AddTodoForm({ showForm, setShowFrom, setInserted }) {
       }, 1500);
       setInputs({});
     }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+      insertTodo();
   };
 
   const handleChange = (event) => {
@@ -41,12 +51,17 @@ function AddTodoForm({ showForm, setShowFrom, setInserted }) {
     setShow(showForm);
   }, [showForm]);
 
+  useEffect(() => {
+    setInputs(updateTodo);
+  }, [updateTodo]);
+
   const handleClose = () => {
     setShow(false);
     setTimeout(() => {
       setShowFrom(false);
       setMsg("");
     }, 150);
+    setUpdateTodo({});
   };
 
   return (
@@ -61,7 +76,9 @@ function AddTodoForm({ showForm, setShowFrom, setInserted }) {
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          <h1 className="text-blue-500 text-2xl m-1 mb-5">Add Todo</h1>
+          <h1 className="text-blue-500 text-2xl m-1 mb-5">
+            {updateTodo.id ? "Update Todo" : "Add Todo"}
+          </h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="name" className="m-1 text-slate-500">
@@ -97,7 +114,7 @@ function AddTodoForm({ showForm, setShowFrom, setInserted }) {
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="p-2 pb-1 pt-1 border border-slate-500 rounded mr-2"
+                  className="p-2 pb-1 pt-1 text-blue-500 border border-blue-500 rounded mr-2"
                 >
                   cancel
                 </button>
@@ -106,7 +123,7 @@ function AddTodoForm({ showForm, setShowFrom, setInserted }) {
                 disabled={wait}
                 className="p-2 pb-1 pt-1 border border-blue-500 bg-blue-500 text-white rounded"
               >
-                {wait ? "please wait..." : "add"}
+                {updateTodo.id ? wait ? "please wait..." : "update" : wait ? "please wait..." : "add"}
               </button>
             </div>
             <br />

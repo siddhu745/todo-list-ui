@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { axiosClient } from "../../../apiClient/apiClient";
-import { CREATE_TODO } from "../../../apiClient/url";
 
 function DeleteAlert({ deleteAlert, setDeleteAlert, setConfirmDeleteTodo }) {
   const [show, setShow] = useState(false);
@@ -31,12 +29,12 @@ function DeleteAlert({ deleteAlert, setDeleteAlert, setConfirmDeleteTodo }) {
         onClick={handleClose}
       >
         <div
-          className={`bg-white p-5 border rounded-md drop-shadow-2xl transition-all duration-300 ease-in-out ${
+          className={`bg-white p-7 border rounded-md drop-shadow-2xl transition-all duration-300 ease-in-out ${
             show ? "mt-0" : "mt-5"
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          <h1 className="text-red-500 text-2xl">Are you sure you want to delete this todo?</h1>
+          <p className="text-red-500 text-xl">Are you sure you want to delete this todo?</p>
           <p className="text-slate-500">You can't undo this action.</p>
           <div className="float-right">
           <button
