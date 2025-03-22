@@ -25,6 +25,9 @@ function Todos() {
   const [items, setItems] = useState([]);
   const [todoStateUpdated, setTodoStateUpdated] = useState({});
   const [deletedTodo, setDeletedTodo] = useState({});
+  const [search, setSearch] = useState("");
+  const [searchItems, setSearchItems] = useState(items);
+
   const { authData, loading, isLogOut, setUnauthError } = useAuth();
   const navigate = useNavigate();
 
@@ -111,6 +114,13 @@ function Todos() {
     }
   }, [inserted]);
 
+  //search
+  useEffect(() => {
+    setSearchItems(
+      items.filter((e) => e.name.toLowerCase().includes(search.toLowerCase()))
+    );
+  }, [search]);
+
   const menuItems = ["All", "Todo", "Completed", "Skipped"];
 
   const getTodoBorderColor = {
@@ -166,12 +176,14 @@ function Todos() {
             />
             {item.state !== menuItems[2].toUpperCase() &&
               item.state !== menuItems[3].toUpperCase() && (
-              <MdBookmarkRemove
-                className="text-slate-400 hover:text-red-500 cursor-pointer"
-                title="skip"
-                onClick={() => updateState(item.id, menuItems[3].toUpperCase())}
-              />
-            )}
+                <MdBookmarkRemove
+                  className="text-slate-400 hover:text-red-500 cursor-pointer"
+                  title="skip"
+                  onClick={() =>
+                    updateState(item.id, menuItems[3].toUpperCase())
+                  }
+                />
+              )}
             {item.state !== menuItems[2].toUpperCase() && (
               <MdDone
                 className="text-slate-400 hover:text-green-500 cursor-pointer"
@@ -220,15 +232,15 @@ function Todos() {
             <div className="text-3xl font-light pb-1">
               <span>
                 {date.toLocaleDateString("en-US", { month: "short" })}
-              </span>
-              ,<span>{date.getFullYear()}</span>
+              </span>{" "}
+              <span>{date.getFullYear()}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* todo menu */}
-      <div className="flex gap-5 items-center">
+      <div className="flex flex-wrap gap-3 items-center">
         <div
           className={`dark:bg-slate-900 w-fit m-3 ml-4 rounded-xl p-1 ${getMenuBgColor[active]}`}
         >
@@ -247,14 +259,26 @@ function Todos() {
             );
           })}
         </div>
-        <button
-          title="Add todo"
-          type="button"
-          className="flex items-center bg-blue-500 text-white font-extrabold text-2xl p-1 rounded-full h-fit"
-          onClick={() => setAddTodo((prev) => !prev)}
-        >
-          <MdAdd />
-        </button>
+        <div className="flex items-center gap-5">
+          <div>
+            <input
+              type="text"
+              name="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search todo..."
+              className=" border-slate-400 p-2 text-lg rounded-lg bg-slate-50 outline-none"
+            />
+          </div>
+          <button
+            title="Add todo"
+            type="button"
+            className="flex items-center bg-blue-500 text-white font-extrabold text-2xl p-1 rounded-full h-fit"
+            onClick={() => setAddTodo((prev) => !prev)}
+          >
+            <MdAdd />
+          </button>
+        </div>
       </div>
 
       {/* items */}
@@ -269,24 +293,34 @@ function Todos() {
           </div>
         ) : (
           <div className="m-3 mt-0 text-2xl font-extralight w-full">
-            {
-              items.filter(
-                (item) =>
-                  item.state === menuItems[active].toUpperCase() || active === 0
-              ).length
-            }{" "}
+            {search.length > 0
+              ? searchItems.filter(
+                  (item) =>
+                    item.state === menuItems[active].toUpperCase() ||
+                    active === 0
+                ).length
+              : items.filter(
+                  (item) =>
+                    item.state === menuItems[active].toUpperCase() ||
+                    active === 0
+                ).length}{" "}
             Todos
           </div>
         )}
 
-        {items
-          .filter(
-            (item) =>
-              item.state === menuItems[active].toUpperCase() || active === 0
-          )
-          .map((item, idx) => (
-            <TodoItem key={idx} item={item} />
-          ))}
+        {search.length > 0
+          ? searchItems
+              .filter(
+                (item) =>
+                  item.state === menuItems[active].toUpperCase() || active === 0
+              )
+              .map((item, idx) => <TodoItem key={idx} item={item} />)
+          : items
+              .filter(
+                (item) =>
+                  item.state === menuItems[active].toUpperCase() || active === 0
+              )
+              .map((item, idx) => <TodoItem key={idx} item={item} />)}
       </div>
 
       <AddTodoForm
