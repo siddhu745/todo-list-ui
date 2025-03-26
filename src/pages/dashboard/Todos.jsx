@@ -267,7 +267,7 @@ function Todos() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search todo..."
-              className=" border-slate-400 p-2 text-lg rounded-lg bg-slate-50 outline-none"
+              className=" border-slate-400 p-2 px-4 text-lg rounded-lg bg-slate-50 outline-none"
             />
           </div>
           <button
