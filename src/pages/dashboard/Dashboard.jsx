@@ -6,9 +6,7 @@ import Todos from "./Todos";
 import { LuLogOut } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { TbSquareToggle } from "react-icons/tb";
-import { SlCalender } from "react-icons/sl";
 import MyActivity from "./MyActivity";
-import OlderTasks from "./OlderTasks";
 
 function Dashboard() {
   const { logOut, authData } = useAuth();
@@ -32,12 +30,7 @@ function Dashboard() {
       icon: <MdAutoGraph />,
       name: "my activity",
       page: <MyActivity />
-    },
-    {
-      icon: <SlCalender />,
-      name: "older tasks",
-      page: <OlderTasks />
-    },
+    }
   ];
 
   return (
