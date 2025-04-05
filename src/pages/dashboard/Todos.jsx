@@ -27,12 +27,14 @@ function Todos() {
   const [deletedTodo, setDeletedTodo] = useState({});
   const [search, setSearch] = useState("");
   const [searchItems, setSearchItems] = useState(items);
+  const [todosLoading, setTodosLoading] = useState(false);
 
   const { authData, loading, isLogOut, setUnauthError } = useAuth();
   const navigate = useNavigate();
 
   const fetch = async () => {
     try {
+      setTodosLoading(true);
       const response = await axiosClient.get(GET_TODO);
       setItems(response.data.data);
     } catch (error) {
@@ -45,6 +47,8 @@ function Todos() {
         // console.log(error, "at protected route")
         navigate("/", { replace: true });
       }
+    } finally {
+      setTodosLoading(false);
     }
   };
 
@@ -282,46 +286,52 @@ function Todos() {
       </div>
 
       {/* items */}
-      <div className="flex p-2 flex-wrap">
-        {items.filter(
-          (item) =>
-            item.state === menuItems[active].toUpperCase() || active === 0
-        ).length === 0 ? (
-          <div className="m-3 mt-0 p-2 text-2xl font-extralight">
-            No todos left here{" "}
-            {active === 0 && ", have a goal today and create one."}
-          </div>
-        ) : (
-          <div className="m-3 mt-0 text-2xl font-extralight w-full">
-            {search.length > 0
-              ? searchItems.filter(
-                  (item) =>
-                    item.state === menuItems[active].toUpperCase() ||
-                    active === 0
-                ).length
-              : items.filter(
-                  (item) =>
-                    item.state === menuItems[active].toUpperCase() ||
-                    active === 0
-                ).length}{" "}
-            Todos
-          </div>
-        )}
+      {todosLoading ? (
+        <div className="m-3 mt-0 p-2 text-2xl font-extralight">Loading...</div>
+      ) : (
+        <div className="flex p-2 flex-wrap">
+          {items.filter(
+            (item) =>
+              item.state === menuItems[active].toUpperCase() || active === 0
+          ).length === 0 ? (
+            <div className="m-3 mt-0 p-2 text-2xl font-extralight">
+              No todos left here{" "}
+              {active === 0 && ", have a goal today and create one."}
+            </div>
+          ) : (
+            <div className="m-3 mt-0 text-2xl font-extralight w-full">
+              {search.length > 0
+                ? searchItems.filter(
+                    (item) =>
+                      item.state === menuItems[active].toUpperCase() ||
+                      active === 0
+                  ).length
+                : items.filter(
+                    (item) =>
+                      item.state === menuItems[active].toUpperCase() ||
+                      active === 0
+                  ).length}{" "}
+              Todos
+            </div>
+          )}
 
-        {search.length > 0
-          ? searchItems
-              .filter(
-                (item) =>
-                  item.state === menuItems[active].toUpperCase() || active === 0
-              )
-              .map((item, idx) => <TodoItem key={idx} item={item} />)
-          : items
-              .filter(
-                (item) =>
-                  item.state === menuItems[active].toUpperCase() || active === 0
-              )
-              .map((item, idx) => <TodoItem key={idx} item={item} />)}
-      </div>
+          {search.length > 0
+            ? searchItems
+                .filter(
+                  (item) =>
+                    item.state === menuItems[active].toUpperCase() ||
+                    active === 0
+                )
+                .map((item, idx) => <TodoItem key={idx} item={item} />)
+            : items
+                .filter(
+                  (item) =>
+                    item.state === menuItems[active].toUpperCase() ||
+                    active === 0
+                )
+                .map((item, idx) => <TodoItem key={idx} item={item} />)}
+        </div>
+      )}
 
       <AddTodoForm
         showForm={addTodo}
