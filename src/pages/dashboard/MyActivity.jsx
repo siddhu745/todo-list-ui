@@ -1,6 +1,5 @@
-import React, { act, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSortDown } from "react-icons/fa6";
-import { MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
@@ -79,8 +78,8 @@ function MyActivity() {
 
   useEffect(() => {
     if (activity) {
-      setMonthModal((prev) => ({ ...prev, data: activity.months[0] }));
-      setYearModal((prev) => ({ ...prev, data: activity.years[0] }));
+      setMonthModal((prev) => ({ ...prev, data: new Date().getMonth() + 1 }));
+      setYearModal((prev) => ({ ...prev, data: new Date().getFullYear() }));
       fetchTodo();
     }
   }, [activity]);
